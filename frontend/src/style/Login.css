@@ -1,0 +1,127 @@
+/* .login-form-body{
+    width: 100vw;
+    min-height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(to right, #f5a9fe, #b0f996);
+    margin-top: var(--nav-margin);
+}
+.login-form{
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding: 20px 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 6px 3px #6969697e;
+}
+.login-form-heading{
+    margin-bottom: 20px;
+}
+.login-form-items{
+    display: flex;
+    align-items: center;
+    margin: 2px 0 15px 0;
+
+}
+.login-form-icon{
+    font-size: 20px;
+    padding: 9px 10px 8px 10px;
+    background-color: black;
+    color: white;
+}
+
+
+.login-form-input{
+    width: 230px;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid black;
+
+}
+
+.login-form-submit{
+  background-image: linear-gradient(to right,#1a2980 0%,#26d0ce 51%,#1a2980 100% );
+  margin: 15px 50px 0 50px;
+  padding: 12px 45px;
+  text-align: center;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+  border-radius: 20px;
+  border: none;
+  font-size: 20px;
+  font-weight: 550;
+  cursor: pointer;
+}
+.login-form-submit:hover{
+    background-position: right center;
+}
+.login-form-benidit{
+    text-align: center;
+    margin-top: 20px;
+}
+.login-form-link{
+    margin-left: 5px;
+    font-size: 17px;
+    font-weight: 600;
+    color: #002aff;
+    margin-bottom: 10px;
+} */
+
+/* => MOBILE */
+/* @media only screen and (max-width: 600px) {
+    .login-form{
+        padding: 10px;
+        border-radius: 10px;
+    }
+    .login-form-heading{
+        margin-bottom: 10px;
+        font-size: 25px;
+    }
+    .login-form-items{
+        display: flex;
+        align-items: center;
+        margin: 10px 0;
+    
+    }
+
+    .login-form-icon{
+        font-size: 16px;
+    }
+    .login-form-input{
+        width: 200px;
+        padding: 8px;
+        font-size: 14px;
+    }
+    .login-form-benidit{
+        font-size: 14px;
+    }
+    .login-form-link{
+        font-size: 15px;
+    }
+  } */
+
+  .auth-page {
+    margin-top: var(--nav-margin);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: #f7f7f7;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 480px) {
+  .auth-page {
+    padding: 12px;
+  }
+}

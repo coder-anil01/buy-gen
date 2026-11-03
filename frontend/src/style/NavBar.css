@@ -1,0 +1,399 @@
+
+/* Main navbar */
+.buygen-navbar {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  background: #fff;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* Keep page layout stable */
+.buygen-navbar-space {
+  height: 170px;
+}
+
+/* Top bar */
+.buygen-topbar {
+  min-height: 36px;
+  box-sizing: border-box;
+  padding: 8px 4%;
+  background: #111827;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  font-size: 12px;
+}
+.buygen-topbar span{
+  color: #fff;
+}
+
+/* Main bar */
+.buygen-mainbar {
+  min-height: 78px;
+  box-sizing: border-box;
+  padding: 14px 4%;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.buygen-logo {
+  font-size: 32px;
+  font-weight: 800;
+  color: #111827;
+  text-decoration: none;
+  letter-spacing: -1.5px;
+  white-space: nowrap;
+}
+
+.buygen-logo span {
+  color: #16a34a;
+}
+
+.buygen-menu-btn {
+  display: none;
+  border: none;
+  background: transparent;
+  font-size: 22px;
+  cursor: pointer;
+  color: #111827;
+}
+
+/* Search */
+.buygen-search {
+  flex: 1;
+  min-width: 0;
+  height: 46px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 5px 4px 16px;
+  background: #f4f5f7;
+  border: 1px solid transparent;
+  border-radius: 30px;
+}
+
+.buygen-search:focus-within {
+  border-color: #16a34a;
+}
+
+.buygen-search-icon {
+  color: #596174;
+  flex-shrink: 0;
+}
+
+.buygen-search input {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  color: #111827;
+}
+
+.buygen-search button {
+  height: 38px;
+  padding: 0 24px;
+  border: none;
+  border-radius: 25px;
+  background: #16a34a;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.buygen-search button:hover {
+  background: #15803d;
+}
+
+/* Actions */
+.buygen-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 24px;
+}
+
+.buygen-action {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 7px;
+  color: #182033;
+  text-decoration: none;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.buygen-cart-icon{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  color: #111;
+}
+.buygen-cart-number{
+  position: absolute;
+  top: -9px;
+  right: -10px;
+  width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #16a34a;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 50%;
+  line-height: 1;
+}
+.buygen-action svg {
+  font-size: 20px;
+}
+
+.buygen-action:hover {
+  color: #16a34a;
+}
+
+/* Category bar */
+.buygen-categorybar {
+  min-height: 54px;
+  box-sizing: border-box;
+  padding: 0 4%;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  border-top: 1px solid #f1f1f5;
+}
+
+.buygen-all-categories {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 13px 18px;
+  border-radius: 9px;
+  background: #16a34a;
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.buygen-category-links {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.buygen-category-links::-webkit-scrollbar {
+  display: none;
+}
+
+.buygen-category-links a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 54px;
+  color: #202536;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.buygen-category-links a svg {
+  font-size: 9px;
+}
+
+.buygen-category-links a:hover,
+.buygen-category-links a.active {
+  color: #16a34a;
+}
+
+/* .buygen-category-links a.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  border-radius: 5px;
+  background: #16a34a;
+} */
+
+/* Tablet */
+@media (max-width: 1000px) {
+  .buygen-topbar span:nth-child(2) {
+    display: none;
+  }
+
+  .buygen-mainbar {
+    gap: 18px;
+  }
+
+  .buygen-actions {
+    gap: 16px;
+  }
+
+  .buygen-categorybar {
+    gap: 20px;
+  }
+
+  .buygen-category-links {
+    gap: 22px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 650px) {
+  .buygen-navbar-space {
+    height: 150px;
+  }
+
+  .buygen-topbar {
+    min-height: 30px;
+    padding: 7px 10px;
+    justify-content: center;
+    font-size: 11px;
+  }
+
+  .buygen-topbar span:nth-child(2),
+  .buygen-topbar span:nth-child(3) {
+    display: none;
+  }
+
+  .buygen-mainbar {
+    min-height: 0;
+    padding: 12px;
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr) auto;
+    gap: 12px;
+  }
+
+  .buygen-menu-btn {
+    display: block;
+  }
+
+  .buygen-logo {
+    font-size: 27px;
+  }
+
+  .buygen-search {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    height: 42px;
+  }
+
+  .buygen-search input {
+    font-size: 13px;
+  }
+
+  .buygen-search button {
+    height: 34px;
+    padding: 0 16px;
+    font-size: 12px;
+  }
+
+  .buygen-actions {
+    gap: 16px;
+  }
+
+  .buygen-action {
+    gap: 0;
+  }
+
+  .buygen-cart-number{
+    top: -5px;
+    right: -5px;
+    width: 14px;
+    height: 14px;
+  }
+
+  .buygen-action svg {
+    font-size: 19px;
+  }
+
+  .buygen-action span {
+    display: none;
+  }
+
+  .buygen-categorybar {
+    display: none;
+    padding: 12px;
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .buygen-categorybar.show {
+    display: flex;
+  }
+
+  .buygen-all-categories {
+    justify-content: space-between;
+  }
+
+  .buygen-category-links {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    overflow: visible;
+    /* justify-content: center; */
+  }
+
+  .buygen-category-links a {
+    min-height: 43px;
+    border-bottom: 1px solid #f1f1f5;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .buygen-category-links a.active::after {
+    display: none;
+  }
+
+  /* Compact search mode */
+  .buygen-navbar.search-only .buygen-topbar {
+    /* display: none; */
+  }
+
+  .buygen-navbar.search-only .buygen-mainbar {
+    display: flex;
+    min-height: 0;
+    padding: 8px 12px;
+    gap: 0;
+  }
+
+  .buygen-navbar.search-only .buygen-menu-btn,
+  .buygen-navbar.search-only .buygen-logo,
+  .buygen-navbar.search-only .buygen-actions,
+  .buygen-navbar.search-only .buygen-categorybar {
+    display: none;
+  }
+
+  .buygen-navbar.search-only .buygen-search {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    height: 42px;
+    margin: 0;
+  }
+}

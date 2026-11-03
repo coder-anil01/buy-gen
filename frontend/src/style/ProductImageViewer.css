@@ -1,0 +1,144 @@
+
+.piv-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.96);
+  color: white;
+  overscroll-behavior: contain;
+}
+
+.piv-stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  touch-action: none;
+  cursor: grab;
+}
+
+.piv-stage.piv-zoomed {
+  cursor: move;
+}
+
+.piv-image {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  padding: 20px;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.piv-close {
+  position: absolute;
+  z-index: 3;
+  top: max(14px, env(safe-area-inset-top));
+  right: 16px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid #ffffff55;
+  border-radius: 50%;
+  background: #222;
+  color: white;
+  font-size: 32px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.piv-arrow {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 58px;
+  border: 0;
+  border-radius: 8px;
+  background: #ffffff24;
+  color: white;
+  font-size: 44px;
+  line-height: 1;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.piv-prev {
+  left: 14px;
+}
+
+.piv-next {
+  right: 14px;
+}
+
+.piv-counter {
+  position: absolute;
+  bottom: max(38px, env(safe-area-inset-bottom));
+  left: 50%;
+  padding: 7px 13px;
+  border-radius: 20px;
+  background: #ffffff;
+  font-size: 13px;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.piv-hint {
+  position: absolute;
+  bottom: max(10px, env(safe-area-inset-bottom));
+  left: 50%;
+  width: max-content;
+  max-width: 90%;
+  color: #ffffffa8;
+  font-size: 11px;
+  text-align: center;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+@media (max-width: 600px) {
+  .piv-image {
+    max-width: 100%;
+    max-height: 86%;
+    padding: 8px;
+  }
+
+  .piv-arrow {
+    width: 34px;
+    height: 46px;
+    font-size: 34px;
+    background: #ffffff18;
+  }
+
+  .piv-prev {
+    left: 5px;
+  }
+
+  .piv-next {
+    right: 5px;
+  }
+
+  .piv-hint {
+    bottom: max(12px, env(safe-area-inset-bottom));
+    font-size: 10px;
+  }
+
+  .piv-counter {
+    bottom: max(38px, calc(env(safe-area-inset-bottom) + 28px));
+  }
+}
