@@ -91,7 +91,6 @@ export const getSingleProductController = async (req, res) => {
         percentage,
       };
     });
-    console.log(totalReviews);
     res.status(200).send({
       success: true,
       message: "Single Product",

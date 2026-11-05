@@ -8,8 +8,8 @@ import "../style/ProductDetails.css";
 import ProductDetailsSkeleton from "./ProductDetailsSkeleton";
 import { FaHeart } from "react-icons/fa6";
 import { FaRegHeart } from "react-icons/fa";
-
-
+import OptimizedImage from "../components/OptimizedImage";
+import optimizeImage from "../utils/optimizeImage";
 
 const apiDomain = import.meta.env.VITE_API_URL || "";
 
@@ -33,7 +33,6 @@ const ProductDetails = () => {
   // EXP
   const [isProductImageViewerOpen, setIsProductImageViewerOpen] =
     useState(false);
-
   const mainImageTouchStart = useRef(null);
 
   const goToProductImage = (step) => {
@@ -74,8 +73,9 @@ const ProductDetails = () => {
       try {
         setLoading(true);
         setError("");
-        const { data } = await axios.get(`${apiDomain}/api/v1/product/get/${id}`,);
-        console.log(data?.product);
+        const { data } = await axios.get(
+          `${apiDomain}/api/v1/product/get/${id}`,
+        );
         setProduct(data?.product);
         setReviews(data?.reviews);
         settotalReviews(data?.totalReviews);
@@ -94,14 +94,11 @@ const ProductDetails = () => {
   useEffect(() => {
     const reloade = () => {
       setIsWishlisted(
-        auth?.wishlist?.some(
-          (item) => item._id === product?._id
-        ) || false
+        auth?.wishlist?.some((item) => item._id === product?._id) || false,
       );
-    }
+    };
     reloade();
   }, [auth?.wishlist, product?._id]);
-
 
   if (loading) {
     return <ProductDetailsSkeleton />;
@@ -124,7 +121,6 @@ const ProductDetails = () => {
     .map((image) => (typeof image === "string" ? image : image?.url))
     .filter(Boolean);
 
-
   const reviewPhotoItems = (reviews || []).flatMap((review) =>
     (review.images || [])
       .map((image, imageIndex) => ({
@@ -141,7 +137,7 @@ const ProductDetails = () => {
     originalPrice > price && originalPrice > 0
       ? Math.round(((originalPrice - price) / originalPrice) * 100)
       : 0;
-  const offer = `Buy${product?.bogoOffers[0]?.buyQuantity}Get${product?.bogoOffers[0]?.getQuantity}`
+  const offer = `Buy${product?.bogoOffers[0]?.buyQuantity}Get${product?.bogoOffers[0]?.getQuantity}`;
   const productTitle = product.title;
   const ratingValue = Math.min(5, Math.max(0, averageRating));
 
@@ -206,15 +202,19 @@ const ProductDetails = () => {
       <div className="product-details-page">
         <div className="product-details-container">
           <div className="product-details-breadcrumb">
-          <span onClick={() => navigate("/")}>Home</span>
-          <span>›</span>
-          <span>{product?.subCategory ? product?.subCategory?.name : product?.category?.name || "Products"}</span>
-          <span>›</span>
-          <span className="product-details-breadcrumb-current">
-            {/* {productTitle} */}
-            {product?.slug}
-          </span>
-        </div>
+            <span onClick={() => navigate("/")}>Home</span>
+            <span>›</span>
+            <span>
+              {product?.subCategory
+                ? product?.subCategory?.name
+                : product?.category?.name || "Products"}
+            </span>
+            <span>›</span>
+            <span className="product-details-breadcrumb-current">
+              {/* {productTitle} */}
+              {product?.slug}
+            </span>
+          </div>
 
           <section className="product-details-main">
             {/* Product images */}
@@ -229,7 +229,14 @@ const ProductDetails = () => {
                     }`}
                     onClick={() => setSelectedImage(index)}
                   >
-                    <img src={image} alt={`${productTitle} ${index + 1}`} />
+                    <OptimizedImage
+                      className="product-details-thumbnail-image"
+                      src={optimizeImage(image, 100)}
+                      alt={`${productTitle} ${index + 1}`}
+                      priority={false}
+                      draggable="false"
+                      objectFit="cover"
+                    />
                   </button>
                 ))}
               </div>
@@ -244,13 +251,11 @@ const ProductDetails = () => {
                   aria-label="Toggle wishlist"
                 >
                   {/* {isWishlisted ? "❤️" : "♡"} */}
-                  {isWishlisted ? <FaHeart/> : <FaRegHeart/>}
+                  {isWishlisted ? <FaHeart /> : <FaRegHeart />}
                 </button>
 
                 {product?.bogoOffers[0] && (
-                  <span className="product-details-sale-badge">
-                    {offer}
-                  </span>
+                  <span className="product-details-sale-badge">{offer}</span>
                 )}
 
                 {images.length > 0 ? (
@@ -327,22 +332,23 @@ const ProductDetails = () => {
                   </p>
                 )}
 
-              {product?.totalReviews > 0 &&
-              <button
-                type="button"
-                className="product-details-rating-summary"
-                onClick={() =>
-                  document
-                    .getElementById("product-reviews")
-                    ?.scrollIntoView({ behavior: "smooth" })
-                }
-              >
-                <span className="product-details-rating-pill">
-                  {ratingValue.toFixed(1)} ★
-                </span>
-                <span className="product-details-stars">★★★★★</span>
-                <span>({totalReviews}) Reviews ›</span>
-              </button>}
+              {product?.totalReviews > 0 && (
+                <button
+                  type="button"
+                  className="product-details-rating-summary"
+                  onClick={() =>
+                    document
+                      .getElementById("product-reviews")
+                      ?.scrollIntoView({ behavior: "smooth" })
+                  }
+                >
+                  <span className="product-details-rating-pill">
+                    {ratingValue.toFixed(1)} ★
+                  </span>
+                  <span className="product-details-stars">★★★★★</span>
+                  <span>({totalReviews}) Reviews ›</span>
+                </button>
+              )}
 
               <div className="product-details-price-row">
                 <strong>₹{price.toLocaleString("en-IN")}</strong>
@@ -399,195 +405,221 @@ const ProductDetails = () => {
           {/*  Product Details */}
           <section>
             <div className="pd-summary">
+              {product?.specifications.length > 0 && (
+                <details open>
+                  <summary>
+                    Product Highlites
+                    <ChevronDown size={18} />
+                  </summary>
+                  <div className="pd-details">
+                    {product.specifications.slice(0, 6).map((index) => (
+                      <div className="pd-details-item" key={index}>
+                        <span>{index.name} </span>
+                        <p>{index.value}</p>
+                      </div>
+                    ))}
+                  </div>
+                </details>
+              )}
 
-              {product?.specifications.length > 0 && <details open>
-                <summary>
-                  Product Highlites
-                  <ChevronDown size={18} />
-                </summary>
-                <div className="pd-details">
-                  {product.specifications.slice(0, 6).map((index) => (
-                    <div className="pd-details-item" key={index}>
-                      <span>{index.name} </span>
-                      <p>{index.value}</p>
+              {product.shortDescription.length > 0 && (
+                <details open>
+                  <summary>
+                    More Information <ChevronDown size={18} />
+                  </summary>
+                  {product.shortDescription.map((benefit, index) => (
+                    <div className="pd-benefit" key={index}>
+                      <div className="benefit-icon">
+                        <span>✓</span>
+                        <span>{benefit}</span>
+                      </div>
                     </div>
                   ))}
-                </div>
-              </details>}
+                </details>
+              )}
 
-              {product.shortDescription.length > 0 && <details open>
-                <summary>
-                  More Information <ChevronDown size={18} />
-                </summary>
-                {product.shortDescription.map((benefit, index) => (
-                  <div className="pd-benefit" key={index}>
-                    <div className="benefit-icon">
-                      <span>✓</span>
-                      <span>{benefit}</span>
-                    </div>
-                  </div>
-                ))}
-              </details>}
-
-              {product.description && <details className="pd-summary">
-                <summary>
-                  Product Description <ChevronDown size={18} />
-                </summary>
-                <p>{product.description}</p>
-              </details>}
-
+              {product.description && (
+                <details className="pd-summary">
+                  <summary>
+                    Product Description <ChevronDown size={18} />
+                  </summary>
+                  <p>{product.description}</p>
+                </details>
+              )}
             </div>
           </section>
 
           {/* Customer reviews */}
-          {totalReviews > 0 &&
-          <section className="product-details-reviews" id="product-reviews">
-            <h2>Customer Ratings &amp; Reviews</h2>
+          {totalReviews > 0 && (
+            <section className="product-details-reviews" id="product-reviews">
+              <h2>Customer Ratings &amp; Reviews</h2>
 
-            <div className="product-details-rating-layout">
-              <div className="product-details-rating-overall">
-                <strong>{ratingValue.toFixed(1)}</strong>
-                <span className="product-details-stars">★★★★★</span>
-                <small>({totalReviews} reviews)</small>
-              </div>
+              <div className="product-details-rating-layout">
+                <div className="product-details-rating-overall">
+                  <strong>{ratingValue.toFixed(1)}</strong>
+                  <span className="product-details-stars">★★★★★</span>
+                  <small>({totalReviews} reviews)</small>
+                </div>
 
-              <div className="product-details-rating-bars">
-                {ratingBreakdown.map((item) => (
-                  <div
-                    className="product-details-rating-bar-row"
-                    key={item.star}
-                  >
-                    <span>{item.star} ★</span>
-                    <div className="product-details-rating-track">
-                      <span style={{ width: `${item.percentage}%` }} />
-                    </div>
-                    <small>{Math.round(item.percentage)}%</small>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <aside className="product-details-review-photo-card">
-              <h2>Product Review Images</h2>
-
-              <div className="product-details-review-photo-grid">
-                {reviewPhotoItems.slice(0, 8).map((item, index) => (
-                  <button
-                    type="button"
-                    className={`review-photo-button ${
-                      index === 7 && reviewPhotoItems.length > 8
-                        ? "review-photo-more"
-                        : ""
-                    }`}
-                    key={`${item.review._id || "review"}-${item.imageIndex}`}
-                    onClick={() => setSelectedReviewPhoto(index)}
-                  >
-                    <img src={item.src} alt="Customer review" loading="lazy" />
-
-                    {index === 7 && reviewPhotoItems.length > 8 && (
-                      <span className="review-photo-overlay">
-                        +{reviewPhotoItems.length - 8}
-                      </span>
-                    )}
-                  </button>
-                ))}
-
-                {!reviewPhotoItems.length && (
-                  <p>Customer photos will appear here.</p>
-                )}
-              </div>
-            </aside>
-
-            <div className="product-details-review-list">
-              {reviews?.length > 0 ? (
-                reviews.map((review, index) => (
-                  <article className="product-details-review-card" key={index}>
-                    <div className="product-details-review-top">
-                      <div className="product-details-review-avatar">
-                        {review.user?.name?.charAt(0).toUpperCase()}
+                <div className="product-details-rating-bars">
+                  {ratingBreakdown.map((item) => (
+                    <div
+                      className="product-details-rating-bar-row"
+                      key={item.star}
+                    >
+                      <span>{item.star} ★</span>
+                      <div className="product-details-rating-track">
+                        <span style={{ width: `${item.percentage}%` }} />
                       </div>
-
-                      <div>
-                        <strong>{review.user?.name || "Customer"}</strong>
-                        <small>
-                          Posted {formatDate(review.createdAt || review.date)}
-                        </small>
-                      </div>
+                      <small>{Math.round(item.percentage)}%</small>
                     </div>
+                  ))}
+                </div>
+              </div>
 
-                    <div className="product-details-review-stars">
-                      {"★".repeat(
-                        Math.min(5, Math.max(0, Number(review.rating) || 0)),
+              <aside className="product-details-review-photo-card">
+                <h2>Product Review Images</h2>
+
+                <div className="product-details-review-photo-grid">
+                  {reviewPhotoItems.slice(0, 8).map((item, index) => (
+                    <button
+                      type="button"
+                      className={`review-photo-button ${
+                        index === 7 && reviewPhotoItems.length > 8
+                          ? "review-photo-more"
+                          : ""
+                      }`}
+                      key={`${item.review._id || "review"}-${item.imageIndex}`}
+                      onClick={() => setSelectedReviewPhoto(index)}
+                    >
+                      <OptimizedImage
+                        src={optimizeImage(item?.src, 100)}
+                        alt={"Customer review"}
+                        priority={false}
+                        objectFit="cover"
+                      />
+
+                      {index === 7 && reviewPhotoItems.length > 8 && (
+                        <span className="review-photo-overlay">
+                          +{reviewPhotoItems.length - 8}
+                        </span>
                       )}
-                      <span>
-                        {"☆".repeat(
-                          5 -
-                            Math.min(
-                              5,
-                              Math.max(0, Number(review.rating) || 0),
-                            ),
+                    </button>
+                  ))}
+
+                  {!reviewPhotoItems.length && (
+                    <p>Customer photos will appear here.</p>
+                  )}
+                </div>
+              </aside>
+
+              <div className="product-details-review-list">
+                {reviews?.length > 0 ? (
+                  reviews.map((review, index) => (
+                    <article
+                      className="product-details-review-card"
+                      key={index}
+                    >
+                      <div className="product-details-review-top">
+                        <div className="product-details-review-avatar">
+                          {review.user?.name?.charAt(0).toUpperCase()}
+                        </div>
+
+                        <div>
+                          <strong>{review.user?.name || "Customer"}</strong>
+                          <small>
+                            Posted {formatDate(review.createdAt || review.date)}
+                          </small>
+                        </div>
+                      </div>
+
+                      <div className="product-details-review-stars">
+                        {"★".repeat(
+                          Math.min(5, Math.max(0, Number(review.rating) || 0)),
                         )}
-                      </span>
-                    </div>
-                    {review.comment &&
-                      (() => {
-                        const words = review.comment.trim().split(/\s+/);
-                        const isLong = words.length > 25;
-                        const isExpanded = expandedReviews[review._id];
-
-                        return (
-                          <p className="review-comment">
-                            {isLong && !isExpanded ? words.slice(0, 25).join(" ") + "..." : review.comment}
-                            {isLong && (
-                              <button type="button" className="review-more-btn"
-                                onClick={() =>setExpandedReviews((prev) => ({...prev,[review._id]: !prev[review._id],}))}>
-                                {isExpanded ? " less" : "more"}
-                              </button>
-                            )}
-                          </p>
-                        );
-                      })()}
-
-                    {review.images?.length > 0 && (
-                      <div className="product-details-review-images">
-                        {review.images.map((image, imageIndex) => {
-                          const src =
-                            typeof image === "string" ? image : image?.url;
-
-                          const photoIndex = reviewPhotoItems.findIndex(
-                            (item) =>
-                              item.review === review &&
-                              item.imageIndex === imageIndex,
-                          );
-
-                          if (!src) return null;
+                        <span>
+                          {"☆".repeat(
+                            5 -
+                              Math.min(
+                                5,
+                                Math.max(0, Number(review.rating) || 0),
+                              ),
+                          )}
+                        </span>
+                      </div>
+                      {review.comment &&
+                        (() => {
+                          const words = review.comment.trim().split(/\s+/);
+                          const isLong = words.length > 25;
+                          const isExpanded = expandedReviews[review._id];
 
                           return (
-                            <button
-                              type="button"
-                              className="review-photo-button"
-                              key={imageIndex}
-                              onClick={() => setSelectedReviewPhoto(photoIndex)}
-                            >
-                              <img
-                                src={src}
-                                alt="Customer review"
-                                loading="lazy"
-                              />
-                            </button>
+                            <p className="review-comment">
+                              {isLong && !isExpanded
+                                ? words.slice(0, 25).join(" ") + "..."
+                                : review.comment}
+                              {isLong && (
+                                <button
+                                  type="button"
+                                  className="review-more-btn"
+                                  onClick={() =>
+                                    setExpandedReviews((prev) => ({
+                                      ...prev,
+                                      [review._id]: !prev[review._id],
+                                    }))
+                                  }
+                                >
+                                  {isExpanded ? " less" : "more"}
+                                </button>
+                              )}
+                            </p>
                           );
-                        })}
-                      </div>
-                    )}
-                  </article>
-                ))
-              ) : (
-                <p className="product-details-no-reviews">
-                  No reviews yet. Be the first to review this product!
-                </p>
-              )}
-            </div>
-          </section>}
+                        })()}
+
+                      {review.images?.length > 0 && (
+                        <div className="product-details-review-images">
+                          {review.images.map((image, imageIndex) => {
+                            const src =
+                              typeof image === "string" ? image : image?.url;
+
+                            const photoIndex = reviewPhotoItems.findIndex(
+                              (item) =>
+                                item.review === review &&
+                                item.imageIndex === imageIndex,
+                            );
+
+                            if (!src) return null;
+
+                            return (
+                              <button
+                                type="button"
+                                className="review-photo-button"
+                                key={imageIndex}
+                                onClick={() =>
+                                  setSelectedReviewPhoto(photoIndex)
+                                }
+                              >
+                                <OptimizedImage
+                                  src={optimizeImage(src, 100)}
+                                  alt={"Customer review"}
+                                  priority={false}
+                                  objectFit="cover"
+                                />
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </article>
+                  ))
+                ) : (
+                  <p className="product-details-no-reviews">
+                    No reviews yet. Be the first to review this product!
+                  </p>
+                )}
+              </div>
+            </section>
+          )}
         </div>
 
         {/* Fixed mobile purchase bar */}
@@ -609,9 +641,22 @@ const ProductDetails = () => {
       {/* POPUP REVIEW */}
       {selectedReviewPhoto !== null &&
         reviewPhotoItems[selectedReviewPhoto] && (
-          <div className="review-image-modal-overlay" onClick={() => setSelectedReviewPhoto(null)}>
-            <div className="review-image-modal" onClick={(e) => e.stopPropagation()}>
-              <button type="button" className="review-modal-close" onClick={() => setSelectedReviewPhoto(null)} aria-label="Close image">×</button>
+          <div
+            className="review-image-modal-overlay"
+            onClick={() => setSelectedReviewPhoto(null)}
+          >
+            <div
+              className="review-image-modal"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                type="button"
+                className="review-modal-close"
+                onClick={() => setSelectedReviewPhoto(null)}
+                aria-label="Close image"
+              >
+                ×
+              </button>
 
               <div className="review-modal-image-area">
                 {reviewPhotoItems.length > 1 && (
@@ -621,12 +666,26 @@ const ProductDetails = () => {
                 )}
 
                 {reviewPhotoItems.length > 1 && (
-                  <button type="button" className="review-modal-arrow review-modal-prev"
-                    onClick={() => setSelectedReviewPhoto((selectedReviewPhoto - 1 + reviewPhotoItems.length) %reviewPhotoItems.length,)}aria-label="Previous image">‹
+                  <button
+                    type="button"
+                    className="review-modal-arrow review-modal-prev"
+                    onClick={() =>
+                      setSelectedReviewPhoto(
+                        (selectedReviewPhoto - 1 + reviewPhotoItems.length) %
+                          reviewPhotoItems.length,
+                      )
+                    }
+                    aria-label="Previous image"
+                  >
+                    ‹
                   </button>
                 )}
 
-                <img src={reviewPhotoItems[selectedReviewPhoto].src} alt="Customer review" className="review-modal-main-image"/>
+                <img
+                  src={reviewPhotoItems[selectedReviewPhoto].src}
+                  alt="Customer review"
+                  className="review-modal-main-image"
+                />
 
                 {reviewPhotoItems.length > 1 && (
                   <button

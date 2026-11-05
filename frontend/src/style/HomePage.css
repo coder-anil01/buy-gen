@@ -495,9 +495,8 @@ BUYGEN HOMEPAGE
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  object-fit: cover;
+  object-fit: cover !important;
   mix-blend-mode: multiply;
-  /* background-color: #0a9c5a; */
   overflow: hidden;
   padding: 4px;
 }
@@ -1430,5 +1429,320 @@ BUYGEN HOMEPAGE
     scroll-behavior: auto !important;
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+
+
+
+
+
+
+/* =================================
+   BUYGEN SKELETON LOADER
+================================= */
+
+.homepage-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: #e9edf3;
+  border-radius: 7px;
+}
+
+.homepage-skeleton::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.75),
+    transparent
+  );
+  animation: homepage-shimmer 1.4s infinite;
+}
+
+@keyframes homepage-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Hero */
+
+.homepage-hero-skeleton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 310px;
+  padding: 35px 6%;
+  overflow: hidden;
+  border-radius: 17px;
+  background: #e9eef5;
+}
+
+.hero-skeleton-content {
+  width: 55%;
+}
+
+.skeleton-eyebrow {
+  width: 150px;
+  height: 12px;
+  margin-bottom: 22px;
+}
+
+.skeleton-title {
+  width: 85%;
+  height: 35px;
+  margin-bottom: 12px;
+}
+
+.skeleton-title.short {
+  width: 60%;
+}
+
+.skeleton-description {
+  width: 75%;
+  height: 13px;
+  margin: 18px 0;
+}
+
+.skeleton-button {
+  width: 115px;
+  height: 40px;
+  margin-top: 12px;
+}
+
+.hero-skeleton-image {
+  width: 35%;
+  height: 210px;
+  border-radius: 15px;
+}
+
+/* Category */
+
+.category-skeleton-card {
+  display: flex;
+  flex: 0 0 112px;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.category-skeleton-image {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+}
+
+.category-skeleton-text {
+  width: 75px;
+  height: 12px;
+}
+
+/* Benefits Skeleton */
+.benefits-skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-top: 25px;
+}
+
+.benefit-skeleton-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+}
+
+.benefit-skeleton-icon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 12px;
+}
+
+.benefit-skeleton-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.benefit-skeleton-title {
+  width: 65%;
+  height: 15px;
+}
+
+.benefit-skeleton-text {
+  width: 90%;
+  height: 11px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .benefits-skeleton-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .benefit-skeleton-card {
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .benefit-skeleton-icon {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+  }
+}
+
+@media (max-width: 480px) {
+  .benefits-skeleton-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .benefit-skeleton-card {
+    padding: 12px 9px;
+  }
+}
+
+/* Product */
+
+.product-skeleton-card {
+  flex: 0 0 218px;
+  border: 1px solid #e7edf4;
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.product-skeleton-image {
+  width: 100%;
+  height: 185px;
+  border-radius: 0;
+}
+
+.product-skeleton-info {
+  padding: 12px;
+}
+
+.product-skeleton-title {
+  width: 90%;
+  height: 13px;
+  margin-bottom: 15px;
+}
+
+.product-skeleton-price {
+  width: 45%;
+  height: 18px;
+  margin-bottom: 12px;
+}
+
+.product-skeleton-rating {
+  width: 65%;
+  height: 11px;
+}
+
+.skeleton-subtitle {
+  width: 190px;
+  height: 10px;
+  margin-top: 9px;
+}
+
+.skeleton-swipe {
+  width: 90px;
+  height: 12px;
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+  .hero-skeleton-image {
+    width: 38%;
+    height: 185px;
+  }
+
+  .product-skeleton-card {
+    flex-basis: 205px;
+  }
+}
+
+@media (max-width: 600px) {
+  .homepage-hero-skeleton {
+    min-height: 225px;
+    padding: 20px;
+    border-radius: 12px;
+  }
+
+  .hero-skeleton-content {
+    width: 65%;
+  }
+
+  .hero-skeleton-image {
+    width: 35%;
+    height: 145px;
+  }
+
+  .skeleton-title {
+    height: 23px;
+  }
+
+  .skeleton-eyebrow {
+    width: 110px;
+    height: 9px;
+    margin-bottom: 15px;
+  }
+
+  .skeleton-description {
+    width: 90%;
+    height: 10px;
+    margin: 12px 0;
+  }
+
+  .skeleton-button {
+    width: 85px;
+    height: 32px;
+  }
+
+  .category-skeleton-card {
+    flex-basis: 83px;
+    gap: 8px;
+  }
+
+  .category-skeleton-image {
+    width: 66px;
+    height: 66px;
+  }
+
+  .category-skeleton-text {
+    width: 60px;
+    height: 10px;
+  }
+
+  .product-skeleton-card {
+    flex-basis: 164px;
+    border-radius: 10px;
+  }
+
+  .product-skeleton-image {
+    height: 140px;
+  }
+
+  .product-skeleton-info {
+    padding: 9px;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .homepage-skeleton::after {
+    animation: none;
   }
 }

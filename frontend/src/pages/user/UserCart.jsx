@@ -4,6 +4,8 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import '../../style/NavCartPage.css'
 import { useAuth } from "../../context/auth";
+import OptimizedImage from "../../components/OptimizedImage";
+import optimizeImage from "../../utils/optimizeImage";
 
 const Cart = () => {
   const [couponCode, setCouponCode] = useState("");
@@ -149,10 +151,12 @@ const Cart = () => {
                   to={`/product/${item._id}`}
                   className="buygen-cart-image"
                 >
-                  <img
-                    src={item.images?.[0]?.url || "/placeholder.png"}
-                    alt={item.title}
-                  />
+                  <OptimizedImage
+                  className="checkout-product-image"
+                  src={optimizeImage(item?.images?.[0]?.url, 150)}
+                  alt={item?.title}
+                  objectFit="cover"
+                />
                 </Link>
 
                 <div className="buygen-cart-product-info">

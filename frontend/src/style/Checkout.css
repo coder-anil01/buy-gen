@@ -192,7 +192,7 @@
   border-top: none;
 }
 
-.checkout-product img {
+.checkout-product-image {
   width: 85px;
   height: 95px;
   flex-shrink: 0;
@@ -355,7 +355,7 @@
     font-size: 15px;
   }
 
-  .checkout-product img {
+  .checkout-product-image {
     width: 72px;
     height: 85px;
   }

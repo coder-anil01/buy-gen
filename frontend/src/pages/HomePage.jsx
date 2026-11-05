@@ -1,8 +1,9 @@
-
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import "../style/HomePage.css";
+import OptimizedImage from "../components/OptimizedImage";
+import optimizeImage from "../utils/optimizeImage";
 
 const banners = [
   {
@@ -11,7 +12,8 @@ const banners = [
     highlight: "Mobiles & Electronics",
     subtitle: "Smartphones, laptops and everyday essentials at great prices.",
     offer: "UP TO 50% OFF",
-    image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=1000",
+    image:
+      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=1000",
     className: "homepage-banner-blue",
     path: "/category/electronics",
   },
@@ -21,7 +23,8 @@ const banners = [
     highlight: "Everyday Fashion",
     subtitle: "Discover fresh looks for men, women and kids.",
     offer: "UP TO 70% OFF",
-    image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1000",
+    image:
+      "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1000",
     className: "homepage-banner-pink",
     path: "/offers/mega-sale",
   },
@@ -31,7 +34,8 @@ const banners = [
     highlight: "Living Space",
     subtitle: "Find home essentials, appliances and more.",
     offer: "DEALS FROM ₹199",
-    image: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1000",
+    image:
+      "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=1000",
     className: "homepage-banner-green",
     path: "/category/home-kitchen",
   },
@@ -52,6 +56,106 @@ const formatPrice = (price) => {
   return `₹${Number(price).toLocaleString("en-IN")}`;
 };
 
+// Reusable skeleton block
+function Skeleton({ className = "" }) {
+  return <div className={`homepage-skeleton ${className}`} />;
+}
+
+// Hero skeleton
+function HeroSkeleton() {
+  return (
+    <section className="homepage-hero">
+      <div className="homepage-hero-skeleton">
+        <div className="hero-skeleton-content">
+          <Skeleton className="skeleton-eyebrow" />
+          <Skeleton className="skeleton-title" />
+          <Skeleton className="skeleton-title short" />
+          <Skeleton className="skeleton-description" />
+          <Skeleton className="skeleton-button" />
+        </div>
+        <Skeleton className="hero-skeleton-image" />
+      </div>
+    </section>
+  );
+}
+
+// Category skeleton
+function CategorySkeleton() {
+  return (
+    <section className="homepage-section">
+      <div className="homepage-section-heading">
+        <div>
+          <h2>Shop by Category</h2>
+          <p>Find your favourites in one place</p>
+        </div>
+      </div>
+
+      <div className="homepage-slider-track">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <div className="category-skeleton-card" key={i}>
+            <Skeleton className="category-skeleton-image" />
+            <Skeleton className="category-skeleton-text" />
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// BenefitsSkeleton
+function BenefitsSkeleton() {
+  return (
+    <div className="benefits-grid benefits-skeleton-grid">
+      {[1, 2, 3, 4].map((item) => (
+        <div className="benefit-card benefit-skeleton-card" key={item}>
+          <Skeleton className="benefit-skeleton-icon" />
+
+          <div className="benefit-skeleton-content">
+            <Skeleton className="benefit-skeleton-title" />
+            <Skeleton className="benefit-skeleton-text" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// Product card skeleton
+function ProductCardSkeleton() {
+  return (
+    <div className="homepage-product-card product-skeleton-card">
+      <Skeleton className="product-skeleton-image" />
+
+      <div className="product-skeleton-info">
+        <Skeleton className="product-skeleton-title" />
+        <Skeleton className="product-skeleton-price" />
+        <Skeleton className="product-skeleton-rating" />
+      </div>
+    </div>
+  );
+}
+
+// Product section skeleton
+function ProductSectionSkeleton({ title }) {
+  return (
+    <section className="homepage-section homepage-products">
+      <div className="homepage-section-heading">
+        <div>
+          <h2>{title}</h2>
+          <Skeleton className="skeleton-subtitle" />
+        </div>
+        <Skeleton className="skeleton-swipe" />
+      </div>
+
+      <div className="homepage-slider-track">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <ProductCardSkeleton key={i} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
 // Reusable horizontal slider
 function HomeSlider({ title, subtitle, children, className = "" }) {
   return (
@@ -62,15 +166,11 @@ function HomeSlider({ title, subtitle, children, className = "" }) {
           {subtitle && <p>{subtitle}</p>}
         </div>
 
-        <span className="homepage-swipe-hint">
-          Swipe to explore →
-        </span>
+        <span className="homepage-swipe-hint">Swipe to explore →</span>
       </div>
 
       <div className="homepage-slider-viewport">
-        <div className="homepage-slider-track">
-          {children}
-        </div>
+        <div className="homepage-slider-track">{children}</div>
       </div>
     </section>
   );
@@ -86,19 +186,18 @@ function ProductCard({ product }) {
         draggable="false"
       >
         <div className="homepage-product-image">
-          {product?.bogoOffers[0] && (
-          // {badge && (
-          //   <span className="homepage-discount">{badge}</span>
+          {product?.bogoOffers?.[0] && (
+            // {badge && (
+            //   <span className="homepage-discount">{badge}</span>
             <span className="homepage-discount">
               {/* {badge} */}
               {`Buy${product?.bogoOffers[0]?.buyQuantity}Get${product?.bogoOffers[0]?.getQuantity}`}
             </span>
           )}
-
-          <img
-            src={product.images?.[0]?.url || "/placeholder.png"}
+          <OptimizedImage
+            src={optimizeImage(product.images?.[0]?.url, 300)}
             alt={product.title || "Product"}
-            loading="lazy"
+            priority={false}
             draggable="false"
           />
         </div>
@@ -116,8 +215,7 @@ function ProductCard({ product }) {
 
           {product.averageRating > 0 ? (
             <div className="homepage-product-rating">
-              <span>★</span> {product.averageRating}
-              {" "}({product.totalReviews})
+              <span>★</span> {product.averageRating} ({product.totalReviews})
               <small> · Rated by Buyers</small>
             </div>
           ) : (
@@ -131,20 +229,12 @@ function ProductCard({ product }) {
   );
 }
 
-
 // Reusable product section
 function ProductSection({ title, subtitle, products }) {
   return (
-    <HomeSlider
-      title={title}
-      subtitle={subtitle}
-      className="homepage-products"
-    >
+    <HomeSlider title={title} subtitle={subtitle} className="homepage-products">
       {products.map((product) => (
-        <ProductCard
-          key={product._id}
-          product={product}
-        />
+        <ProductCard key={product._id} product={product} />
       ))}
     </HomeSlider>
   );
@@ -194,18 +284,17 @@ export default function HomePage() {
     const distance = touchStart.current - event.changedTouches[0].clientX;
 
     if (Math.abs(distance) > 45) {
-      setActiveBanner((current) =>
-        (current + (distance > 0 ? 1 : -1) + banners.length) %
-        banners.length
+      setActiveBanner(
+        (current) =>
+          (current + (distance > 0 ? 1 : -1) + banners.length) % banners.length,
       );
     }
   };
 
   return (
     <main className="homepage">
-
       {/* Hero Banner */}
-      <section className="homepage-hero">
+      {/* <section className="homepage-hero">
         <div
           className={`homepage-hero-banner ${banners[activeBanner].className}`}
           onTouchStart={(event) => {
@@ -259,10 +348,68 @@ export default function HomePage() {
             />
           ))}
         </div>
-      </section>
+      </section> */}
+
+      {/* Hero Banner */}
+      {loading ? (
+        <HeroSkeleton />
+      ) : (
+        <section className="homepage-hero">
+          <div
+            className={`homepage-hero-banner ${banners[activeBanner].className}`}
+            onTouchStart={(event) => {
+              touchStart.current = event.touches[0].clientX;
+            }}
+            onTouchEnd={handleTouchEnd}
+          >
+            <div className="homepage-hero-content">
+              <span className="homepage-hero-eyebrow">
+                {banners[activeBanner].eyebrow}
+              </span>
+
+              <h1>
+                {banners[activeBanner].title}
+                <strong>{banners[activeBanner].highlight}</strong>
+              </h1>
+
+              <p>{banners[activeBanner].subtitle}</p>
+
+              <Link
+                to={banners[activeBanner].path}
+                className="homepage-shop-button"
+              >
+                Shop Now →
+              </Link>
+            </div>
+
+            <div className="homepage-hero-image">
+              <img
+                src={banners[activeBanner].image}
+                alt={banners[activeBanner].highlight}
+              />
+
+              <div className="homepage-hero-offer">
+                {banners[activeBanner].offer}
+              </div>
+            </div>
+          </div>
+
+          <div className="homepage-hero-dots">
+            {banners.map((banner, index) => (
+              <button
+                key={banner.highlight}
+                type="button"
+                aria-label={`Show banner ${index + 1}`}
+                className={activeBanner === index ? "homepage-dot-active" : ""}
+                onClick={() => setActiveBanner(index)}
+              />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Categories */}
-      {!loading && categories.length > 0 && (
+      {/* {!loading && categories.length > 0 && (
         <HomeSlider
           title="Shop by Category"
           subtitle="Find your favourites in one place"
@@ -288,54 +435,119 @@ export default function HomePage() {
             </Link>
           ))}
         </HomeSlider>
-      )}
+      )} */}
+
+      {loading ? (
+        <CategorySkeleton />
+      ) : categories.length > 0 ? (
+        <HomeSlider
+          title="Shop by Category"
+          subtitle="Find your favourites in one place"
+          className="homepage-categories"
+        >
+          {categories.map((category) => (
+            <Link
+              to={`/category/${category._id}`}
+              className="homepage-category-card"
+              key={category._id}
+            >
+              <div className="homepage-category-image">
+                <OptimizedImage
+                  src={optimizeImage(category?.image, 100)}
+                  alt={category?.name || "Category"}
+                  priority={false}
+                  draggable="false"
+                />
+              </div>
+              <span>{category?.name}</span>
+            </Link>
+          ))}
+        </HomeSlider>
+      ) : null}
+
+      {/* Benefits */}
+      <section className="benefits-section">
+        {loading ? (
+          <BenefitsSkeleton />
+        ) : (
+          <section className="homepage-benefits">
+            {benefits.map((benefit) => (
+              <div className="homepage-benefit" key={benefit.title}>
+                <div className="homepage-benefit-icon">{benefit.icon}</div>
+
+                <div>
+                  <h3>{benefit.title}</h3>
+                  <p>{benefit.subtitle}</p>
+                </div>
+              </div>
+            ))}
+          </section>
+        )}
+      </section>
 
       {/* Best Sellers */}
-      {products.length > 0 && (
+      {/* {products.length > 0 && (
         <ProductSection
           title="Best Sellers"
           subtitle="The products everyone keeps coming back for."
           products={products}
         />
-      )}
+      )} */}
 
       {/* Special Offers */}
-      {products.length > 0 && (
+      {/* {products.length > 0 && (
         <ProductSection
           title="Special Offers"
           subtitle="Explore limited-time deals and exclusive savings."
           products={products}
         />
-      )}
+      )} */}
 
-      {/* Benefits */}
-      <section className="homepage-benefits">
-        {benefits.map((benefit) => (
-          <div className="homepage-benefit" key={benefit.title}>
-            <div className="homepage-benefit-icon">
-              {benefit.icon}
-            </div>
+      {/* Best Sellers */}
+      {loading ? (
+        <ProductSectionSkeleton title="Best Sellers" />
+      ) : products.length > 0 ? (
+        <ProductSection
+          title="Best Sellers"
+          subtitle="The products everyone keeps coming back for."
+          products={products}
+        />
+      ) : null}
 
-            <div>
-              <h3>{benefit.title}</h3>
-              <p>{benefit.subtitle}</p>
-            </div>
-          </div>
-        ))}
-      </section>
+      {/* Special Offers */}
+      {loading ? (
+        <ProductSectionSkeleton title="Special Offers" />
+      ) : products.length > 0 ? (
+        <ProductSection
+          title="Special Offers"
+          subtitle="Explore limited-time deals and exclusive savings."
+          products={products}
+        />
+      ) : null}
 
       {/* New Arrivals */}
-      {products.length > 0 && (
+      {loading ? (
+        <ProductSectionSkeleton title="New Arrivals" />
+      ) : products.length > 0 ? (
+        <ProductSection
+          title="New Arrivals"
+          subtitle="Fresh finds, newly added to your collection."
+          products={products}
+        />
+      ) : null}
+
+      {/* New Arrivals */}
+      {/* {products.length > 0 && (
         <ProductSection
           title="New Arrivals"
           subtitle="Fresh finds, newly added to your collection."
           products={products}
           badge="New"
         />
-      )}
+      )} */}
 
       {/* Buy One Get One Banner */}
-      <section className="homepage-bogo-banner">
+      {/* <section className="homepage-bogo-banner">
         <div className="homepage-bogo-content">
           <span>DOUBLE THE JOY</span>
           <h2>Buy 1, Get 1 Free</h2>
@@ -351,10 +563,10 @@ export default function HomePage() {
           <span>+</span>
           <span>1</span>
         </div>
-      </section>
+      </section> */}
 
       {/* Feature Banners */}
-      <section className="homepage-feature-grid">
+      {/* <section className="homepage-feature-grid">
         <Link
           to="/category/fashion"
           className="homepage-feature-card homepage-feature-fashion"
@@ -390,10 +602,10 @@ export default function HomePage() {
             loading="lazy"
           />
         </Link>
-      </section>
+      </section> */}
 
       {/* Trust Section */}
-      <section className="homepage-trust-strip">
+      {/* <section className="homepage-trust-strip">
         <div>
           <span>🔒</span>
           <p>
@@ -417,8 +629,7 @@ export default function HomePage() {
             <small>We're here to help</small>
           </p>
         </div>
-      </section>
-
+      </section> */}
     </main>
   );
 }
