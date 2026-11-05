@@ -10,6 +10,7 @@ import { FaHeart } from "react-icons/fa6";
 import { FaRegHeart } from "react-icons/fa";
 import OptimizedImage from "../components/OptimizedImage";
 import optimizeImage from "../utils/optimizeImage";
+import { Helmet } from "react-helmet-async";
 
 const apiDomain = import.meta.env.VITE_API_URL || "";
 
@@ -131,14 +132,14 @@ const ProductDetails = () => {
       .filter((item) => item.src),
   );
 
-  const price = Number(product.price ?? 0);
-  const originalPrice = Number(product.compareAtPrice ?? 0);
+  const price = Number(product?.price ?? 0);
+  const originalPrice = Number(product?.compareAtPrice ?? 0);
   const discount =
     originalPrice > price && originalPrice > 0
       ? Math.round(((originalPrice - price) / originalPrice) * 100)
       : 0;
   const offer = `Buy${product?.bogoOffers[0]?.buyQuantity}Get${product?.bogoOffers[0]?.getQuantity}`;
-  const productTitle = product.title;
+  const productTitle = product?.title;
   const ratingValue = Math.min(5, Math.max(0, averageRating));
 
   // Add to Wishlist
@@ -199,6 +200,17 @@ const ProductDetails = () => {
 
   return (
     <>
+    <Helmet>
+      <title>{product?.title} - BuyGen</title>
+      <meta name="description" content={product?.shortDescription || productTitle} />
+      <meta name="keywords" content={`${productTitle}, BuyGen, online shopping, e-commerce`} />
+      <meta name="author" content="BuyGen Team" />
+      <meta property="og:title" content={`${productTitle} - BuyGen`} />
+      <meta property="og:description" content={product.shortDescription || productTitle} />
+      <meta property="og:image" content={images[0] || ""} />
+      <meta property="og:url" content={window.location.href} />
+      <meta name="twitter:card" content="summary_large_image" />
+    </Helmet>
       <div className="product-details-page">
         <div className="product-details-container">
           <div className="product-details-breadcrumb">

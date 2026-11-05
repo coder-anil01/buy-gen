@@ -57,62 +57,108 @@ const Checkout = () => {
   const deliveryCharge = total >= 499 ? 0 : 40;
   const finalAmount = total + deliveryCharge;
 
+  // Place order function
   const placeOrder = async () => {
-    if (!items.length) {
-      toast.error("Your checkout is empty");
+    if (loading) return;
+
+    // Check cart items
+    if (!items?.length) {
+      alert("Your cart is empty");
       navigate("/cart");
       return;
     }
 
-    // if (Object.values(address).some((value) => !String(value).trim())) {
-    //   toast.error("Please fill all address details");
-    //   return;
-    // }
+    // Decide which address to use
+    const useNewAddress = !addressExist || addressModel;
+
+    // Validate address only when adding or editing address
+    if (useNewAddress) {
+      const fields = [
+        ["name", "Full Name"],
+        ["mobile", "Mobile Number"],
+        ["pincode", "PIN Code"],
+        ["house", "House / Street Address"],
+        ["landmark", "Landmark"],
+        ["city", "City"],
+        ["state", "State"],
+      ];
+
+      const emptyField = fields.find(
+        ([field]) => !String(address?.[field] ?? "").trim(),
+      );
+
+      if (emptyField) {
+        alert(`Please enter ${emptyField[1]}`);
+        return;
+      }
+
+      // Mobile validation
+      if (!/^[6-9]\d{9}$/.test(String(address.mobile).trim())) {
+        alert("Please enter a valid 10-digit mobile number");
+        return;
+      }
+
+      // Pincode validation
+      if (!/^\d{6}$/.test(String(address.pincode).trim())) {
+        alert("Please enter a valid 6-digit PIN code");
+        return;
+      }
+    } else if (!auth?.address?._id) {
+      alert("Please add a delivery address first");
+      return;
+    }
 
     try {
       setLoading(true);
 
+      // Prepare order data
       const orderData = {
         product: items,
         paymentMethod: "COD",
         userid: auth?.user?._id || null,
-        ...(!addressExist || addressModel
+
+        ...(useNewAddress
           ? {
-              name: address.name,
-              mobile: address.mobile,
-              pincode: address.pincode,
-              house: address.house,
-              landmark: address.landmark,
-              city: address.city,
-              state: address.state,
+              name: address.name.trim(),
+              mobile: address.mobile.trim(),
+              pincode: address.pincode.trim(),
+              house: address.house.trim(),
+              landmark: address.landmark.trim(),
+              city: address.city.trim(),
+              state: address.state.trim(),
             }
-          : auth?.address?._id
-            ? { addressid: auth.address._id }
-            : {}),
+          : {
+              addressid: auth.address._id,
+            }),
       };
 
+      // Create order API
       const { data } = await axios.post(
         `${apiDomain}/api/v1/order/create`,
         orderData,
       );
-      console.log(data);
-      setPlacedOrderId(data.order?._id || data.orderId || "");
-      setShowOrderSuccess(true);
-      setLoading(true);
 
+      // Update authentication data
       const updatedAuth = {
         ...auth,
         user: data?.user ?? auth?.user,
         token: data?.token ?? auth?.token,
         address: data?.address ?? auth?.address,
       };
+
       setAuth(updatedAuth);
       localStorage.setItem("auth", JSON.stringify(updatedAuth));
+
+      // Show order success
+      setPlacedOrderId(data.order?._id || data.orderId);
+      setShowOrderSuccess(true);
     } catch (error) {
-      toast.error(
+      console.error("Order placing error:", error);
+
+      alert(
         error.response?.data?.message ||
           error.message ||
-          "Unable to place order",
+          "Something went wrong while placing your order",
       );
     } finally {
       setLoading(false);

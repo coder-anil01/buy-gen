@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import "../style/HomePage.css";
 import OptimizedImage from "../components/OptimizedImage";
 import optimizeImage from "../utils/optimizeImage";
+import{ Helmet } from "react-helmet-async";
 
 const banners = [
   {
@@ -292,6 +293,14 @@ export default function HomePage() {
   };
 
   return (
+    <>
+    <Helmet>
+      <title>Home - BuyGen</title>
+      <meta name="description" content="Welcome to BuyGen, your one-stop destination for all your shopping needs." />
+      <meta name="keywords" content="BuyGen, online shopping, e-commerce, deals, discounts, products" />
+      <meta name="author" content="BuyGen Team" />
+      <meta property="og:title" content="Home - BuyGen" />
+    </Helmet>
     <main className="homepage">
       {/* Hero Banner */}
       {/* <section className="homepage-hero">
@@ -631,5 +640,6 @@ export default function HomePage() {
         </div>
       </section> */}
     </main>
+    </>
   );
 }

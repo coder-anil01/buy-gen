@@ -1,156 +1,3 @@
-// import axios from 'axios';
-// import { useEffect, useState } from 'react'
-// import { useParams, useNavigate, useLocation } from 'react-router-dom'
-// import { useAuth } from '../../context/auth';
-// import { FaHome, FaUser,FaPhoneAlt } from "react-icons/fa";
-// import axios from 'axios';
-// import '../../style/PaymentBuy.css'
-// import { Collapse } from 'antd';
-// import { toast } from 'react-toastify';
-// import { Modal } from "antd";
-// import Coungraculation from "../../image/right.png";
-// import SeoHelmet from '../../components/SeoHelmet';
-
-// const PaymentBuy = () => {
-//   const apiDomain = import.meta.env.VITE_API_URL;
-
-//     const params = useParams();
-//     const loacation = useLocation()
-//     const navigate = useNavigate();
-//     const[auth] = useAuth();
-//     const [product, setProduct] = useState("");
-//     const [showkay, setShowkey] = useState(2)
-//     const [isModalOpen, setIsModalOpen] = useState(false);
-
-//     // All Product
-//     useEffect(()=>{
-//       const getProduct = async () => {
-//       try {
-//         const { data } = await axios.get(`${apiDomain}/api/v1/product/get/${params.id}`);
-//         setProduct(data.product)
-//       } catch (error) {
-//         console.log(error);
-//      }
-//     };
-
-//     getProduct();
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//   },[])
-
-//   const conformOrder =async()=> {
-//     try {
-//       const {data} = await axios.post(`${apiDomain}/api/v1/order/createone`, {cart: product?._id, id: auth?.user?._id, price: product?.price });
-//       if(data.success){
-//         setIsModalOpen(true);
-//         setTimeout(() => {
-//           handleCancel();
-//         }, 5000);
-//       }else{
-//         toast.warn(data.message)
-//       }
-//     } catch (error) {
-//       toast.error("Internal Server Error")
-//       error;
-//     }
-//   }
-
-//   const login = () => {
-//     navigate('/login', {state: loacation.pathname})
-//   }
-//   const register = () => {
-//     navigate('/register', {state: loacation.pathname})
-//   }
-//   const editProfile = () => {
-//     navigate('/dashbord/profile', {state: loacation.pathname})
-//   }
-//   const handleCancel = ()=> {
-//     setIsModalOpen(false)
-//     navigate('/dashbord/order')
-//   }
-
-//   return (
-//     <>
-//     <SeoHelmet title="💸(COD) Order Product" description="Cash on Delivery,' a hassle-free way to complete your purchase. With this method, you can finalize your order by paying in cash upon the delivery of your chosen items. Enjoy the flexibility and peace of mind knowing that you can inspect your products before making the payment. It's a simple, reliable way to shop, ensuring your satisfaction every step of the way. Select 'Cash on Delivery' at checkout and indulge in a seamless shopping experience, where convenience meets trust."/>
-//     {auth?.user ? <>
-//         <div className='payment-buy'>
-//         <Collapse accordion={true} expandIconPosition='right' activeKey={[showkay]} size='small' >
-//             <Collapse.Panel className='payment-collapse' key={"1"} header={<div className='payment-collapse-header'><div className='payment-collapse-number'>1</div> LOGIN</div>}>
-//                 <div>login success </div>
-//             </Collapse.Panel>
-
-//             <Collapse.Panel className='payment-collapse' key={"2"} header={<div className='payment-collapse-header'><div className='payment-collapse-number'>2</div>DELIVERY ADDRESS</div>}>
-//             <div className='payment-collapse-auth'>
-//               <div>
-//                 <div><FaUser/> {auth?.user?.name}</div>
-//                 <div><FaPhoneAlt/> {auth?.user?.phone}</div>
-//                 <div><FaHome/> {auth?.user?.address}</div>
-//               </div>
-//               <div onClick={editProfile} className='payment-collapse-change'>Edit</div>
-//             </div>
-//                 <button onClick={()=> setShowkey(3)} className='payment-collapse-order-button'>DELIVER HERE</button>
-//             </Collapse.Panel>
-//             <Collapse.Panel className='payment-collapse' key={"3"} header={<div className='payment-collapse-header'> <div className='payment-collapse-number'>3</div>ORDER SUMMERY</div>}>
-//             <div className='payment-collapse-product-card'>
-//                 <img className='payment-collapse-product-image' src={product.image} alt={product?.title?.slice(0, 8)} />
-//                 <div className='payment-collapse-product-title'>
-//                     <div>{product?.title?.slice(0, 20)}</div>
-//                     <div className='payment-collapse-product-price'><strong>Price:- </strong>₹{product.price}</div>
-//                     <button onClick={()=> setShowkey(4)} className='payment-collapse-order-button'>CONTINUE</button>
-//                 </div>
-//             </div>
-//             </Collapse.Panel>
-
-//             <Collapse.Panel className='payment-collapse' key={"4"} header={<div className='payment-collapse-header'><div className='payment-collapse-number'>4</div>PAYMENT OPTION</div>}>
-//                 <img className='payment-collapse-cod' src="https://i.postimg.cc/br9ntbrT/cod.png" alt="" />
-//                 <button onClick={conformOrder} style={{float: "right"}} className='payment-collapse-order-button'>CONFORM ORDER</button>
-//             </Collapse.Panel>
-//         </Collapse>
-//         <div className='payment-buy-right'>
-//             <div className='payment-buy-price-heading'>Payment-details</div>
-//             <div className='payment-buy-line'/>
-//             <div className='payment-buy-item'>
-//                 <div>Price( 1 item )</div>
-//                 <div>{product.price}</div>
-//             </div>
-//             <div className='payment-buy-item'>
-//                 <div>Delivery Charges</div>
-//                 <div className='payment-buy-delivery-free'>FREE</div>
-//             </div>
-//             <div className='payment-buy-line'/>
-//             <div className='payment-buy-item-total-price'>
-//                 <div>Total Payable:- </div>
-//                 <div>₹{product.price}</div>
-//             </div>
-//         </div>
-//         </div>
-//         </> : <>
-//           <div className='user-routes'>
-//             <div className='user-routes-card'>
-//               <div className='user-routes-text'>I have an account</div>
-//               <div className='user-routes-button' onClick={login} >Login</div>
-
-//               <div className='user-routes-text'>I don't have an account</div>
-//               <div className='user-routes-button' onClick={register}>Create</div>
-//             </div>
-//           </div>
-//         </>}
-
-//         <Modal className='model-container' open={isModalOpen} maskClosable={false} footer={null} onCancel={handleCancel}>
-//           <div className='model-order-placed'>
-//             <div className='model-order-placed-coungration'>Coungraculation</div>
-//             <div className='model-order-placed-image-main'>
-//               <img className='model-order-placed-image' src={Coungraculation} alt="" />
-//             </div>
-//             <div className='model-order-placed-text'>YOUR ORDER HAS BEEN CONFORMED</div>
-//             <div className='model-order-placed-thanks'>THANKS</div>
-//           </div>
-//         </Modal>
-//     </>
-//   )
-// }
-
-// export default PaymentBuy
-
 import { useEffect, useState } from "react";
 // import { useParams } from 'react-router-dom';
 import { useLocation } from "react-router-dom";
@@ -176,8 +23,7 @@ const BuyNow = () => {
 
   const apiDomain = import.meta.env.VITE_API_URL;
   const [paymentMethod, setPaymentMethod] = useState("COD");
-  const [addressType, setAddressType] = useState("Home");
-  // const [placeOrder, setPlaceOrder] = useState(true);
+  const deliveryCharge = 0;
   const [address, setAddress] = useState({
     name: auth?.address?.name || "",
     mobile: auth?.address?.mobile || null,
@@ -200,60 +46,102 @@ const BuyNow = () => {
     setAddress({ ...address, [e.target.name]: e.target.value });
   };
 
-  const deliveryCharge = 0;
-  // const productPrice = product?.price || 0;
-  // const productMRP = product?.compareAtPrice || 0;
-  // const discount =(product?.compareAtPrice - product?.price);
-  // const totalAmount = productPrice + deliveryCharge;
-
+  // Place order function
   const placeOrder = async () => {
-    // if (Object.values(address).some((value) => !String(value).trim())) {
-    //   toast.error("Please fill all address details");
-    //   return;
-    // }
+    if (loading) return;
+
+    // Decide which address to use
+    const useNewAddress = !addressExist || addressModel;
+
+    // Validate address only when adding or editing address
+    if (useNewAddress) {
+      const fields = [
+        ["name", "Full Name"],
+        ["mobile", "Mobile Number"],
+        ["pincode", "PIN Code"],
+        ["house", "House / Street Address"],
+        ["landmark", "Landmark"],
+        ["city", "City"],
+        ["state", "State"],
+      ];
+
+      const emptyField = fields.find(
+        ([field]) => !String(address?.[field] ?? "").trim(),
+      );
+
+      if (emptyField) {
+        alert(`Please enter ${emptyField[1]}`);
+        return;
+      }
+
+      // Mobile validation
+      if (!/^[6-9]\d{9}$/.test(String(address.mobile).trim())) {
+        alert("Please enter a valid 10-digit mobile number");
+        return;
+      }
+
+      // Pincode validation
+      if (!/^\d{6}$/.test(String(address.pincode).trim())) {
+        alert("Please enter a valid 6-digit PIN code");
+        return;
+      }
+    } else if (!auth?.address?._id) {
+      alert("Please add a delivery address first");
+      return;
+    }
 
     try {
       setLoading(true);
 
+      // Prepare order data
       const orderData = {
         productid: product?._id,
         paymentMethod: "COD",
         userid: auth?.user?._id || null,
-        ...(!addressExist || addressModel
+
+        ...(useNewAddress
           ? {
-              name: address.name,
-              mobile: address.mobile,
-              pincode: address.pincode,
-              house: address.house,
-              landmark: address.landmark,
-              city: address.city,
-              state: address.state,
+              name: address.name.trim(),
+              mobile: address.mobile.trim(),
+              pincode: address.pincode.trim(),
+              house: address.house.trim(),
+              landmark: address.landmark.trim(),
+              city: address.city.trim(),
+              state: address.state.trim(),
             }
-          : auth?.address?._id
-            ? { addressid: auth.address._id }
-            : {}),
+          : {
+              addressid: auth.address._id,
+            }),
       };
 
-      console.log(orderData);
+      // Create order API
       const { data } = await axios.post(
         `${apiDomain}/api/v1/order/create-one-order`,
         orderData,
       );
-      console.log(data);
-      setPlacedOrderId(data.order?._id || data.orderId || "");
-      setShowOrderSuccess(true);
-      setLoading(true);
 
+      // Update authentication data
       const updatedAuth = {
         ...auth,
         user: data?.user ?? auth?.user,
         token: data?.token ?? auth?.token,
         address: data?.address ?? auth?.address,
       };
+
       setAuth(updatedAuth);
       localStorage.setItem("auth", JSON.stringify(updatedAuth));
+
+      // Show order success
+      setPlacedOrderId(data.order?._id || data.orderId);
+      setShowOrderSuccess(true);
     } catch (error) {
-      console.log(error);
+      console.error("Order placing error:", error);
+
+      alert(
+        error.response?.data?.message ||
+          error.message ||
+          "Something went wrong while placing your order",
+      );
     } finally {
       setLoading(false);
     }

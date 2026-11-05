@@ -327,6 +327,7 @@
 
 .product-details-purchase-buttons button:last-child:hover {
   background: var(--pd-green-light);
+  background-color: #116638;
 }
 
 .product-details-review-photo-card{
