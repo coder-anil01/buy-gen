@@ -108,7 +108,7 @@ const ProductDetails = () => {
   if (error || !product) {
     return (
       <div className="product-details-status">
-        <h3>Product not found</h3>
+        <h1>Product not found</h1>
         <p>{error || "This product is not available."}</p>
         <button onClick={() => navigate("/")}>Go Home</button>
       </div>
@@ -200,17 +200,22 @@ const ProductDetails = () => {
 
   return (
     <>
-    <Helmet>
-      <title>{product?.title} - BuyGen</title>
-      <meta name="description" content={product?.shortDescription || productTitle} />
-      <meta name="keywords" content={`${productTitle}, BuyGen, online shopping, e-commerce`} />
-      <meta name="author" content="BuyGen Team" />
-      <meta property="og:title" content={`${productTitle} - BuyGen`} />
-      <meta property="og:description" content={product.shortDescription || productTitle} />
-      <meta property="og:image" content={images[0] || ""} />
-      <meta property="og:url" content={window.location.href} />
-      <meta name="twitter:card" content="summary_large_image" />
-    </Helmet>
+      <Helmet>
+        <title>{product?.title ? `${product.title} | BuyGen` : "BuyGen - Online Shopping"}</title>
+        <meta name="description" content={ product?.shortDescription ? product?.shortDescription : "Buy products online at BuyGen" } />
+        <meta property="og:title" content={ product?.title ? `${product.title} | BuyGen` : "BuyGen - Online Shopping" } />
+        <meta
+          property="og:description"
+          content={product?.shortDescription ? product?.shortDescription : "Buy products online at BuyGen"}
+        />
+        <meta
+          property="og:image" content={ product?.images?.[0]?.url ? product?.images?.[0]?.url :
+            "https://res.cloudinary.com/pbykkmdq/image/upload/f_auto,q_auto,w_100,c_limit/v1791045756/hqcsiqqd8jnnfpjceniz.png"
+          }
+        />
+        <meta property="og:url" content={window.location.href} />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Helmet>
       <div className="product-details-page">
         <div className="product-details-container">
           <div className="product-details-breadcrumb">
